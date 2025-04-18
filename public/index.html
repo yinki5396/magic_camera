@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Say Yeah Say Cheese</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #000;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 0;
+            width: min(95vw, calc(95vh * 1.67));
+            aspect-ratio: 1.67/1;
+            max-width: 1600px;
+            position: relative;
+            z-index: 1;
+            overflow: visible;
+        }
+
+        .grid-item {
+            position: relative;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transform: translateY(0);
+            opacity: 1;
+            will-change: transform, opacity;
+        }
+
+        .grid-item:nth-child(odd) {
+            background-color: #ffc0cb;
+        }
+
+        .grid-item:nth-child(even) {
+            background-color: #b8b8b8;
+        }
+
+        .outer-grid-item {
+            position: absolute;
+            z-index: 0;
+            aspect-ratio: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(0);
+            opacity: 1;
+            will-change: transform, opacity;
+        }
+
+        /* 顶部行 */
+        .top-row-1 { background-color: #b8b8b8; top: -100%; left: 0; width: 100%; height: 100%; }
+        .top-row-2 { background-color: #ffc0cb; top: -100%; left: 20%; width: 100%; height: 100%; }
+        .top-row-3 { background-color: #b8b8b8; top: -100%; left: 40%; width: 100%; height: 100%; }
+        .top-row-4 { background-color: #ffc0cb; top: -100%; left: 60%; width: 100%; height: 100%; }
+        .top-row-5 { background-color: #b8b8b8; top: -100%; left: 80%; width: 100%; height: 100%; }
+
+        /* 底部行 */
+        .bottom-row-1 { background-color: #b8b8b8; bottom: -100%; left: 0; width: 100%; height: 100%; }
+        .bottom-row-2 { background-color: #ffc0cb; bottom: -100%; left: 20%; width: 100%; height: 100%; }
+        .bottom-row-3 { background-color: #b8b8b8; bottom: -100%; left: 40%; width: 100%; height: 100%; }
+        .bottom-row-4 { background-color: #ffc0cb; bottom: -100%; left: 60%; width: 100%; height: 100%; }
+        .bottom-row-5 { background-color: #b8b8b8; bottom: -100%; left: 80%; width: 100%; height: 100%; }
+
+        /* 左侧列 */
+        .left-column-1 { background-color: #b8b8b8; top: 0; left: -100%; width: 100%; height: 100%; }
+        .left-column-2 { background-color: #ffc0cb; top: 33.33%; left: -100%; width: 100%; height: 100%; }
+        .left-column-3 { background-color: #b8b8b8; top: 66.66%; left: -100%; width: 100%; height: 100%; }
+
+        /* 右侧列 */
+        .right-column-1 { background-color: #b8b8b8; top: 0; right: -100%; width: 100%; height: 100%; }
+        .right-column-2 { background-color: #ffc0cb; top: 33.33%; right: -100%; width: 100%; height: 100%; }
+        .right-column-3 { background-color: #b8b8b8; top: 66.66%; right: -100%; width: 100%; height: 100%; }
+
+        /* 角落 */
+        .top-left { background-color: #b8b8b8; top: -100%; left: -100%; width: 100%; height: 100%; }
+        .top-right { background-color: #b8b8b8; top: -100%; right: -100%; width: 100%; height: 100%; }
+        .bottom-left { background-color: #b8b8b8; bottom: -100%; left: -100%; width: 100%; height: 100%; }
+        .bottom-right { background-color: #b8b8b8; bottom: -100%; right: -100%; width: 100%; height: 100%; }
+
+        .center-cell {
+            background-color: #000 !important;
+            grid-column: 3;
+            grid-row: 2;
+        }
+
+        .text-container {
+            grid-column: 3;
+            grid-row: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-size: clamp(20px, 3.5vmin, 28px);
+            font-weight: bold;
+            line-height: 1.2;
+            color: #000;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .button-container {
+            grid-column: 3;
+            grid-row: 3;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .enter-button {
+            width: clamp(80px, 15vmin, 120px);
+            height: clamp(40px, 7vmin, 60px);
+            background-color: #000;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            font-size: clamp(14px, 2vmin, 18px);
+        }
+
+        .enter-button:hover {
+            transform: scale(1.05);
+        }
+
+        .gesture-img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+            transition: transform 0.3s ease;
+        }
+
+        .gesture-img:hover {
+            transform: scale(1.05);
+        }
+
+        .phone-img {
+            width: 80%;
+            height: 80%;
+            object-fit: contain;
+        }
+
+        @keyframes slideUp {
+            0% { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(-100vh);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideDown {
+            0% { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% { 
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+
+        .slide-up {
+            animation: slideUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        .slide-down {
+            animation: slideDown 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @media (max-aspect-ratio: 1/1) {
+            .grid-container {
+                width: 95vw;
+                height: calc(95vw * 0.6);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="grid-container">
+        <!-- Outer grid items -->
+        <div class="outer-grid-item top-row-1"></div>
+        <div class="outer-grid-item top-row-2"></div>
+        <div class="outer-grid-item top-row-3"></div>
+        <div class="outer-grid-item top-row-4"></div>
+        <div class="outer-grid-item top-row-5"></div>
+        
+        <div class="outer-grid-item bottom-row-1"></div>
+        <div class="outer-grid-item bottom-row-2"></div>
+        <div class="outer-grid-item bottom-row-3"></div>
+        <div class="outer-grid-item bottom-row-4"></div>
+        <div class="outer-grid-item bottom-row-5"></div>
+        
+        <div class="outer-grid-item left-column-1"></div>
+        <div class="outer-grid-item left-column-2"></div>
+        <div class="outer-grid-item left-column-3"></div>
+        
+        <div class="outer-grid-item right-column-1"></div>
+        <div class="outer-grid-item right-column-2"></div>
+        <div class="outer-grid-item right-column-3"></div>
+        
+        <div class="outer-grid-item corner top-left"></div>
+        <div class="outer-grid-item corner top-right"></div>
+        <div class="outer-grid-item corner bottom-left"></div>
+        <div class="outer-grid-item corner bottom-right"></div>
+
+        <!-- Original grid content -->
+        <!-- Row 1 -->
+        <div class="grid-item"><img src="/images/布.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item"><img src="/images/点赞.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item text-container">
+            <div>say yeah~</div>
+            <div>say cheese~</div>
+        </div>
+        <div class="grid-item"><img src="/images/拳头.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item"><img src="/images/耶.png" alt="手势" class="gesture-img"></div>
+
+        <!-- Row 2 -->
+        <div class="grid-item"><img src="/images/耶.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item"><img src="/images/布.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item center-cell">
+            <img src="/images/手机.jpg" alt="手机" class="phone-img">
+        </div>
+        <div class="grid-item"><img src="/images/点赞.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item"><img src="/images/拳头.png" alt="手势" class="gesture-img"></div>
+
+        <!-- Row 3 -->
+        <div class="grid-item"><img src="/images/点赞.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item"><img src="/images/耶.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item button-container">
+            <button class="enter-button" onclick="startTransition()">进入相机</button>
+        </div>
+        <div class="grid-item"><img src="/images/布.png" alt="手势" class="gesture-img"></div>
+        <div class="grid-item"><img src="/images/拳头.png" alt="手势" class="gesture-img"></div>
+    </div>
+
+    <script>
+        let isTransitioning = false;
+
+        function startTransition() {
+            if (isTransitioning) return;
+            isTransitioning = true;
+
+            const gridItems = document.querySelectorAll('.grid-item');
+            const outerItems = document.querySelectorAll('.outer-grid-item');
+            
+            // 处理主网格的动画
+            gridItems.forEach((item, index) => {
+                const column = (index % 5) + 1;
+                if (column % 2 === 1) {
+                    item.classList.add('slide-up');
+                } else {
+                    item.classList.add('slide-down');
+                }
+            });
+
+            // 处理外部格子的动画
+            outerItems.forEach((item, index) => {
+                if (index % 2 === 0) {
+                    item.classList.add('slide-up');
+                } else {
+                    item.classList.add('slide-down');
+                }
+            });
+            
+            setTimeout(() => {
+                window.location.replace('camera.html');
+            }, 750);
+        }
+    </script>
+</body>
+</html> 
