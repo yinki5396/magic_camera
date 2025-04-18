@@ -3,9 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
     <title>AI Camera</title>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands@0.4.1646424915/hands.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
@@ -820,7 +817,7 @@
 
                 while (retryCount < maxRetries) {
                     try {
-                        const response = await fetch('/api/upload-image', {
+                        const response = await fetch('http://localhost:3000/api/upload-image', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
@@ -871,7 +868,7 @@
             
             try {
                 // 调用风格转换API，使用二进制数据
-                const response = await fetch('/api/style-transfer', {
+                const response = await fetch('http://localhost:3000/api/style-transfer', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
