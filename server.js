@@ -2,12 +2,11 @@ const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const FormData = require('form-data');
-const path = require('path');
 const app = express();
 
 app.use(cors());
 app.use(express.json({ limit: '50mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static('public'));
 
 const openApi = require('@volcengine/openapi')
 
@@ -36,11 +35,6 @@ const STYLE_PARAMS = {
         sub_req_key: 'img2img_clay_style_3d'
     }
 };
-
-// 添加根路径处理
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'camera.html'));
-});
 
 app.post('/api/style-transfer', async (req, res) => {
     try {
